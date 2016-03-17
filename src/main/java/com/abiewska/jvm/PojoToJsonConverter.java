@@ -18,6 +18,7 @@ public class PojoToJsonConverter {
 		String fldName;
 		Object fldVal;
 		Class<?> type;
+		
 		for (int i = 0; i < fields.length; i++) {
 
 			fields[i].setAccessible(true);
@@ -27,31 +28,23 @@ public class PojoToJsonConverter {
 			json.append("  \"" + fldName + "\": ");
 
 			if (type.isArray()) {
-				json.append("[\n");
 				json.append(arrayToJson(fldVal, type));
-				json.setLength(json.length() - 2);
-				json.append("\n  ],\n");
 			} else if (isCollection(type)) {
-				json.append("[\n");
-				ParameterizedType fieldGenericType = (ParameterizedType) fields[i]
-						.getGenericType();
-				Class<?> fieldTypeParameterType = (Class<?>) fieldGenericType
-						.getActualTypeArguments()[0];
+				ParameterizedType fieldGenericType = (ParameterizedType) fields[i].getGenericType();
+				Class<?> fieldTypeParameterType = (Class<?>) fieldGenericType.getActualTypeArguments()[0];
 				Method toArray = List.class.getDeclaredMethod("toArray");
-				json.append(arrayToJson(toArray.invoke(fldVal),
-						fieldTypeParameterType));
-				json.setLength(json.length() - 2);
-				json.append("\n  ],\n");
+				json.append(arrayToJson(toArray.invoke(fldVal), fieldTypeParameterType));
 			} else if (isBoolean(type)) {
-				json.append("" + fldVal + ",\n");
+				json.append(fldVal);
 			} else if (isNumber(type)) {
-				json.append("" + fldVal + ",\n");
+				json.append(fldVal);
 			} else {
-				json.append("\"" + fldVal + "\",\n");
+				json.append("\"" + fldVal + "\"");
 			}
+			if (i < fields.length - 1)
+				json.append(",\n");
 		}
 
-		json.setLength(json.length() - 2);
 		json.append("\n}");
 
 		return json.toString();
@@ -84,20 +77,20 @@ public class PojoToJsonConverter {
 		StringBuilder arrayJson = new StringBuilder();
 		Object arrayVal;
 		int length = Array.getLength(array);
-		if (length > 0) {
-			for (int i = 0; i < length; i++) {
-				arrayVal = Array.get(array, i);
-				if (isBoolean(type)) {
-					arrayJson.append("\t" + arrayVal + ",\n");
-				} else if (isNumber(type)) {
-					arrayJson.append("\t" + arrayVal + ",\n");
-				} else {
-					arrayJson.append("\t\"" + arrayVal + "\",\n");
-				}
+		arrayJson.append("[\n");
+		for (int i = 0; i < length; i++) {
+			arrayVal = Array.get(array, i);
+			if (isBoolean(type)) {
+				arrayJson.append("\t" + arrayVal);
+			} else if (isNumber(type)) {
+				arrayJson.append("\t" + arrayVal);
+			} else {
+				arrayJson.append("\t\"" + arrayVal + "\"");
 			}
-		} else {
-			arrayJson.append(",\n");
+			if (i < length - 1)
+				arrayJson.append(",\n");
 		}
+		arrayJson.append("\n  ]");
 		return arrayJson.toString();
 	}
 
