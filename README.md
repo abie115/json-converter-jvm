@@ -14,34 +14,34 @@ Konwerter obsługuje pola publiczne i prywatne, typy proste, tablice, listy bez 
 
 Przykładowy wynik użycia mojego konwertera:
 ```
-{"Animal": {
-	"name": "Delfin",
-	"age": 5,
-	"food": [
-		"gruszka",
-		"glony",
-		"marchewka",
-		"pietruszka"
-	],
-	"number": [
-		1,
-		2,
-		45
-	],
-	"weight": 50.45,
-	"vegetarian": false,
-	"listKeeper": [
-		"Kowalski",
-		"Wiaderko"
-	],
-	"empty": [
+{
+  "name": "Delfin",
+  "age": 5,
+  "food": [
+	"gruszka",
+	"glony",
+	"marchewka",
+	"pietruszka"
+  ],
+  "number": [
+	1,
+	2,
+	45
+  ],
+  "weight": 50.45,
+  "vegetarian": false,
+  "listKeeper": [
+	"Kowalski",
+	"Wiaderko"
+  ],
+  "empty": [
 
-	],
-	"listArray": [
-		12,
-		15
-	]
-}}
+  ],
+  "listArray": [
+	12,
+	15
+  ]
+}
 ```
 ##Test
 Maszyna na której został wykonany test:

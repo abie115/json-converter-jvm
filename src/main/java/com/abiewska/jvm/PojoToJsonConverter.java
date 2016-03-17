@@ -13,29 +13,24 @@ public class PojoToJsonConverter {
 	public String pojoToJson(Object object) throws IllegalArgumentException,
 			IllegalAccessException, NoSuchMethodException, SecurityException,
 			InvocationTargetException {
-		StringBuilder json = new StringBuilder("{");
+		StringBuilder json = new StringBuilder("{\n");
 		Field[] fields = object.getClass().getDeclaredFields();
 		String fldName;
 		Object fldVal;
 		Class<?> type;
-		String clsName = object.getClass().getSimpleName();
-
-		json.append("\"" + clsName + "\": ");
-		json.append("{\n");
-
 		for (int i = 0; i < fields.length; i++) {
 
 			fields[i].setAccessible(true);
 			fldName = fields[i].getName();
 			fldVal = fields[i].get(object);
 			type = fields[i].getType();
-			json.append("\t\"" + fldName + "\": ");
+			json.append("  \"" + fldName + "\": ");
 
 			if (type.isArray()) {
 				json.append("[\n");
 				json.append(arrayToJson(fldVal, type));
 				json.setLength(json.length() - 2);
-				json.append("\n\t],\n");
+				json.append("\n  ],\n");
 			} else if (isCollection(type)) {
 				json.append("[\n");
 				ParameterizedType fieldGenericType = (ParameterizedType) fields[i]
@@ -46,7 +41,7 @@ public class PojoToJsonConverter {
 				json.append(arrayToJson(toArray.invoke(fldVal),
 						fieldTypeParameterType));
 				json.setLength(json.length() - 2);
-				json.append("\n\t],\n");
+				json.append("\n  ],\n");
 			} else if (isBoolean(type)) {
 				json.append("" + fldVal + ",\n");
 			} else if (isNumber(type)) {
@@ -57,7 +52,7 @@ public class PojoToJsonConverter {
 		}
 
 		json.setLength(json.length() - 2);
-		json.append("\n}}");
+		json.append("\n}");
 
 		return json.toString();
 
@@ -93,11 +88,11 @@ public class PojoToJsonConverter {
 			for (int i = 0; i < length; i++) {
 				arrayVal = Array.get(array, i);
 				if (isBoolean(type)) {
-					arrayJson.append("\t\t" + arrayVal + ",\n");
+					arrayJson.append("\t" + arrayVal + ",\n");
 				} else if (isNumber(type)) {
-					arrayJson.append("\t\t" + arrayVal + ",\n");
+					arrayJson.append("\t" + arrayVal + ",\n");
 				} else {
-					arrayJson.append("\t\t\"" + arrayVal + "\",\n");
+					arrayJson.append("\t\"" + arrayVal + "\",\n");
 				}
 			}
 		} else {
