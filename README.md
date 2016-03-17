@@ -52,7 +52,7 @@ OS: Windows 7 Home Premium 64-bit
 Java wersja: 1.8.0_73
 ```
 
-Program iterował w pęli 1000 razy. Następnie każda z metod została wywołana 10 razy. Skrajne wyniki zostały pominięte. Czas konwertowania został uśredniony.
+Test został uruchomiony 10 razy w ramach, którego było 1000 wywołań konwertowania za pomocą mojego konwertera i biblioteki Gson. Dwa skrajne wyniki zostały pominięte. Średnia czasu wykonania konwertowania została obliczona na podstawie 8 uruchomień testów.
 <br>
 ```
 Sredni czas mojego konwertera: 4.24151155E7 ns
